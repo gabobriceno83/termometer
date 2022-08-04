@@ -23,7 +23,7 @@ agent { label 'Slave_QA2' }
     }
     stage('version') {
       steps {
-        powershell script: "$PSversionTable"
+        powershell script: $PSversionTable
       } 
     }
    
