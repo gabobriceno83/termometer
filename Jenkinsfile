@@ -1,6 +1,6 @@
 pipeline {
-//  agent { label 'Slave_QA2' }
- agent any
+agent { label 'Slave_QA2' }
+// agent any
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
@@ -23,7 +23,7 @@ pipeline {
     }
     stage('version') {
       steps {
-        bat 'pwsh --version'
+        powershell script: "pwsh --version"
       } 
     }
    
