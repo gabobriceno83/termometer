@@ -23,7 +23,7 @@ agent { label 'Slave_QA2' }
     }
     stage('version') {
       steps {
-        powershell script: "get-help"
+        powershell script: "ipconfig"
       } 
     }
    
