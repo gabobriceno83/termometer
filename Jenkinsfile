@@ -12,6 +12,7 @@ agent { label 'Slave_Dev2' }
   tools {
     // Install the Maven version configured as "M3" and add it to the path.
     maven "MAVEN"
+    jdk 'Java8'
    }
    
   stages {
