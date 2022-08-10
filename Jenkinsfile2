@@ -25,7 +25,12 @@ agent { label 'Slave_QA2' }
     }
     stage('JFROG-CLI') {
       steps {
-     powershell """("Start-Process -Wait -Verb RunAs powershell '-NoProfile iwr https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/[RELEASE]/jfrog-cli-windows-amd64/jf.exe -OutFile $env:SYSTEMROOT\\system32\\jf.exe'" ; jf setup)"""
+     powershell """(
+     \"Start-Process -Wait -Verb RunAs powershell '-NoProfile iwr https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/[RELEASE]/jfrog-cli-windows-amd64/jf.exe -OutFile $env:SYSTEMROOT\\system32\\jf.exe'"
+      \jf rt u --url https://pruebaitera.jfrog.io/artifactory --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/termometer-0.0.1-SNAPSHOT.jar java-web-app/)"""
+    
+    
+    //powershell """(
      // bat 'pwsh --version'
     
     //  @powershell "Start-Process -Wait -Verb RunAs powershell '-NoProfile iwr https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/[RELEASE]/jfrog-cli-windows-amd64/jf.exe -OutFile $env:SYSTEMROOT\system32\jf.exe'"
@@ -38,15 +43,15 @@ agent { label 'Slave_QA2' }
       } 
     }  
   
-    stage('Upload') {
-      steps {
+  //  stage('Upload') {
+   //   steps {
          
          // bat 'jf rt u --url http://192.168.0.60:8082/ui/login/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/termometer-0.0.1-SNAPSHOT.jar java-web-app/'
-            bat 'jf rt u --url https://pruebaitera.jfrog.io/artifactory --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/termometer-0.0.1-SNAPSHOT.jar java-web-app/'
+         //   bat 'jf rt u --url https://pruebaitera.jfrog.io/artifactory --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/termometer-0.0.1-SNAPSHOT.jar java-web-app/'
         //bat 'curl -ugaboxi83@gmail.com:Angel_2022 -T "C:\\agent\\WorkSpace\\workspace\\artifactory-upload\\target" "https://pruebaitera.jfrog.io/artifactory/java-web-app/target/termometer-0.0.1-SNAPSHOT.jar"'
      
-      }
-    }
+     // }
+   // }
    
   }
   
