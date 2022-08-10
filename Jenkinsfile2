@@ -26,7 +26,7 @@ agent any
     stage('Upload') {
       steps {
        // powershell script: "Start-Process -Wait -Verb RunAs powershell '-NoProfile iwr https://releases.jfrog.io/artifactory/jfrog-cli/v2:2.20.0/jfrog-cli-windows-amd64/jf.exe -OutFile $env:SYSTEMROOT/system32/jf.exe'"
-     //pwsh:powershell "Start-Process -Wait -Verb RunAs powershell '-NoProfile iwr https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/[RELEASE]/jfrog-cli-windows-amd64/jf.exe -OutFile $env:SYSTEMROOT\system32\jf.exe'" ; jf setup
+     bat 'pwsh powershell "Start-Process -Wait -Verb RunAs powershell '-NoProfile iwr https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/[RELEASE]/jfrog-cli-windows-amd64/jf.exe -OutFile $env:SYSTEMROOT\system32\jf.exe'" ; jf setup'
           powershell script:"Start-Process -Wait -Verb RunAs powershell '-NoProfile iwr https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf/[RELEASE]/jfrog-cli-windows-amd64/jf.exe -OutFile $env:SYSTEMROOT\system32\jf.exe'" ; jf setup
     // bat 'jf rt u --url http://192.168.0.60:8082/ui/login/ --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/termometer-0.0.1-SNAPSHOT.jar java-web-app/'
        bat 'jf rt u --url https://pruebaitera.jfrog.io/artifactory --access-token ${ARTIFACTORY_ACCESS_TOKEN} target/termometer-0.0.1-SNAPSHOT.jar java-web-app/'
