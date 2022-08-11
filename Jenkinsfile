@@ -6,7 +6,7 @@ agent { label 'Slave_Dev1' }
   }
   environment {
     CI = true
-    ARTIFACTORY_ACCESS_TOKEN = credentials('artifactory-access-token2')
+    ARTIFACTORY_ACCESS_TOKEN = credentials('artifactory-access-token')
   }
   
   tools {
