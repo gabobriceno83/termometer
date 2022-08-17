@@ -29,7 +29,7 @@ agent { label 'Slave_QA2' }
      
      bat'jf rt u --url https://pruebaitera.jfrog.io/artifactory --access-token %ARTIFACTORY_ACCESS_TOKEN% target/termometer-0.0.1-SNAPSHOT.jar java-web-app/'
     
-     bat'jf rt dl --url https://pruebaitera.jfrog.io/artifactory/java-web-app/target/ --access-token %ARTIFACTORY_ACCESS_TOKEN% --sort-by=created --sort-order=desc --limit=1'
+     bat'jf rt dl --artifactory-url https://pruebaitera.jfrog.io/artifactory/java-web-app/target/ --access-token %ARTIFACTORY_ACCESS_TOKEN% --sort-by=created --sort-order=desc --limit=1'
     
      
         }
