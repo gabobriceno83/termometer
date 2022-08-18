@@ -29,7 +29,7 @@ agent { label 'Slave_Dev1' }
      
      bat'jf rt u --url http://192.168.0.60:8082/artifactory --access-token %ARTIFACTORY_ACCESS_TOKEN% target/termometer-0.0.1-SNAPSHOT.jar java-web-app/'
      
-     bat'jf rt dl "java-web-app/target/termometer-0.0.1-SNAPSHOT.jar" --url http://192.168.0.60:8082/artifactory --access-token %ARTIFACTORY_ACCESS_TOKEN% C:\\builds\\'
+     bat'jf rt dl "java-web-app/target/termometer-0.0.1-SNAPSHOT.jar" --url http://192.168.0.60:8082/artifactory --access-token %ARTIFACTORY_ACCESS_TOKEN% C:\\compilado\\'
         }
   
       }   
