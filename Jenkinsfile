@@ -16,7 +16,7 @@ agent { label 'Slave_Dev1' }
    }
    
   stages {
-    stage('Compilacion') {
+    stage('COMPILACION-X') {
       steps {
          bat 'mvn clean package'
    
