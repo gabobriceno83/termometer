@@ -27,35 +27,4 @@ pipeline {
      
    
    
-      stage('SonarQube Analysis') {
-         agent {
-             label 'Slave_Dev1'
-     }
       
-      steps {
-        withSonarQubeEnv('SonarQubeServer') {
-            bat "${scannerHome}/bin/sonar-scanner.bat" 
-                       bat'-Dsonar.login=jenkins'
-                       bat'-Dsonar.password=12345678b'
-                       bat'-Dsonar.projectKey=TestSeguridata'
-                       bat'-Dsonar.projectName=TestSeguridata'
-                       bat'-Dsonar.projectVersion=0.0.${BUILD_NUMBER}'
-                       bat'-Dsonar.sources=.'
-                       bat'-Dsonar.language=java'
-                       bat'-Dsonar.exclusions=vendor/**,resources/**,**/*.java' 
-                       bat'-Dsonar.host.url=http://192.168.0.60:9015'
-                 }
-        
-             }
-        
-    stage("Quality Gate") {
-        steps {
-            timeout(time: 3, unit: 'MINUTES') {
-            // In case of SonarQube failure or direct timeout exceed, stop Pipeline
-            waitForQualityGate abortPipeline: true
-          }
-      }
-   }
-}
-}
-}
