@@ -23,7 +23,9 @@ pipeline {
             echo 'Clona el repo'
             git 'https://github.com/gabobriceno83/termometer.git'
          }
-      }     
+      } 
+      
+    }
      
    
    
