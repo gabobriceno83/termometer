@@ -1,0 +1,151 @@
+pipeline {
+   agent any
+   tools {
+      maven 'MAVEN'
+      jdk 'Java11'
+   }
+   libraries {
+      lib('SHRD_LBS_DEVOPS@main')
+   }
+   environment {
+      CI = true
+      ARTIFACTORY_ACCESS_TOKEN = credentials('artifactory-access-token')
+   }
+   stages {
+      stage('Clone the repo') {
+         agent {
+            label 'Slave_Dev1'
+
+         }
+         steps {
+
+            echo 'Clona el repo'
+            git credentialsId: 'TokenSebastianGitHub', url: 'https://github.com/fborjasgdata/ws-segurisign-synchronize.git'
+         }
+      }
+      stage('Maven Build SETTINGS') {
+         agent {
+            label 'Slave_Dev1'
+         }
+         steps {
+            withMaven(mavenSettingsConfig: 'mvn-setting-xml') {
+               bat 'mvn clean -U package'
+            }
+
+         }
+      }
+
+      /*stage('Maven Build') {
+      	agent{
+      	label'Slave_Dev1'
+      	}
+      	steps{
+      		withMaven( mavenSettingsConfig: 'mvn-setting-xml') {
+      			withSonarQubeEnv(installationName : 'SonarQubeServer'){
+      			bat 'mvn sonar:sonar'
+      			}
+      		}	
+      	}
+      	
+      }*/
+      
+      stage('Quality gate') {
+         steps {
+            echo 'Quality gate'
+         }
+      }
+
+      stage('Unit Test') {
+
+         steps {
+            echo 'stage 3 here'
+         }
+      }
+      
+      stage('SonarQube Test') {
+
+         steps {
+            echo 'stage 4 here'
+         }
+      }
+      
+      stage('UPLOAD-ARTIFACTORY') {
+         agent {
+            label 'Slave_Dev1'
+
+         }
+         steps {
+           powershell """("Start-Process -Wait -Verb RunAs powershell '-NoProfile iwr https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf v2.24.2/jfrog-cli-windows-amd64/jf.exe -OutFile $env:SYSTEMROOT\\system32\\jf.exe'")"""
+
+             bat'jf rt u --url http://192.168.0.60:8082/artifactory --access-token %ARTIFACTORY_ACCESS_TOKEN% target/wsrest-segurisign-lite.war java-web-app/'
+            }
+  
+      }  
+      
+      stage('DOWNLOAD-ARTECTORY') {
+         agent {
+            label 'Slave_QA2'
+
+         }
+         steps {
+           powershell """("Start-Process -Wait -Verb RunAs powershell '-NoProfile iwr https://releases.jfrog.io/artifactory/jfrog-cli/v2-jf v2.24.2/jfrog-cli-windows-amd64/jf.exe -OutFile $env:SYSTEMROOT\\system32\\jf.exe'")"""
+               bat'jf rt dl "java-web-app/target/wsrest-segurisign-lite.war" --url http://192.168.0.60:8082/artifactory --access-token %ARTIFACTORY_ACCESS_TOKEN% C:\\samplewar\\'
+
+           }
+  
+      } 
+      
+      stage('getRepoInfo'){
+         steps{
+             getRepositoryInfo()
+         }
+      }
+      
+      stage('Deploy') {
+         agent {
+            label 'Slave_QA2'
+
+         }
+         steps {
+             dir("C:\\samplewar\\target") {
+                 fileOperations([fileCopyOperation(excludes: '', flattenFiles: true, includes: '*.war', targetLocation: "${WORKSPACE}")])
+             }
+             deployTomcatBat()
+
+
+         }
+         
+     }
+     
+    //  stage('Clean Workspaces'){
+        
+      //   steps{
+        //    cleanWs deleteDirs: true, notFailBuild: true, patterns: [[pattern: '*', type: 'INCLUDE']]
+         //}
+      //}
+      
+      
+      //stage('Deploy') {
+      //agent{
+      //label'Slave_Dev1'
+      //}
+      // steps {
+      // deploy adapters: [
+      //tomcat8(credentialsId: '5018bfd1-e21d-44c6-9ac2-2a7991f612b8', 
+      //tomcat8(credentialsId: '5018bfd1-e21d-44c6-9ac2-2a7991f612b8', 
+      //		path: '', url: 'http://192.168.0.156:8071')], 
+      //	contextPath: 'wsrest-segurisign-lite', war: '**/*.war'
+      //  getRepositoryInfo()  
+      //  deployTomcatBat()
+
+      //}
+      //}
+
+   }
+   //post {
+   //always{
+   //	emailext(attachLog: true, body:'El archivo adjunto corresponde al log de ejecucion', subject: "Estatus de Ejecucion del Pipeline - "+env.JOB_NAME+" : "+currentBuild.currentResult, to: 'cperez@seguridata.com')
+   //}
+   //}
+}
+
